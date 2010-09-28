@@ -1,8 +1,0 @@
-{
-  "env": {
-    "default": {
-      "db": "http://jan:pr1nc0@127.0.0.1:5984/gigan",
-      "index": 
-    }
-  }
-}

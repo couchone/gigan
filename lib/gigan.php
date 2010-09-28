@@ -25,18 +25,18 @@ $couch = new CouchSimple(array(
 
 $ids = array();
 
-if(!isset($_ENV["GIGAN_BOOT"])) {
+if(!getenv('GIGAN_BOOT')) {
   echo "Updating\n";
-  // ask gigan for the last updated bug's updated timestamp
+  // ask gigan-view for the last updated bug's updated timestamp
 
   echo "debug: getting latest update\n";
-  $latest_update_result = $couch->send("GET", "/$db/_design/gigan/_view/latest-update?descending=true&limit=1");
+  $latest_update_result = $couch->send("GET", "/$db/_design/gigan-view/_view/latest-update?descending=true&limit=1");
   $latest_update_result = json_decode($latest_update_result);
   $latest_update = $latest_update_result->rows[0]->key;
   echo "debug: latest update: $latest_update\n";
 
   echo "debug: getting latest comment update\n";
-  $latest_comment_update_result = $couch->send("GET", "/$db/_design/gigan/_view/latest-comment-update?descending=true&limit=1");
+  $latest_comment_update_result = $couch->send("GET", "/$db/_design/gigan-view/_view/latest-comment-update?descending=true&limit=1");
   $latest_comment_update_result = json_decode($latest_comment_update_result);
   $latest_comment_update = $latest_comment_update_result->rows[0]->key;
   echo "debug: latest comment update: $latest_comment_update\n";
@@ -158,10 +158,10 @@ foreach($ids AS $id) {
     $res = $couch->send("GET", "/$db/$json->_id");
     if($res) {
       $doc = json_decode($res);
-      if($doc->_rev) {
+      if(isset($doc->_rev)) {
         $json->_rev = $doc->_rev;
       }
-      if($doc->couchdb_fields) {
+      if(isset($doc->couchdb_fields)) {
         $json->couchdb_fields = $doc->couchdb_fields;
       }
     }
